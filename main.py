@@ -3,6 +3,11 @@ import speech_recognition
 import pyttsx3 as tts
 import sys
 import webbrowser as wb
+from pynput.keyboard import Key, Controller, Listener, KeyCode
+from pynput import keyboard 
+from time import sleep
+from googletrans import Translator
+import subprocess #aby otwierać aplikacje
 
 recognizer = speech_recognition.Recognizer();
 
@@ -10,7 +15,7 @@ speaker = tts.init()
 speaker.setProperty('rate', 150)
 voices = speaker.getProperty('voices')
 speaker.setProperty('voice', voices[1].id)
-
+    
 todo_list = ['Go shopping', 'Clean room']
 
 def create_note():
@@ -147,6 +152,50 @@ def youtube():
             speaker.say("I did not understand! Please try again.")
             speaker.runAndWait()
 
+def skip():
+    kb = Controller()
+    kb.press(Key.media_next)
+
+    speaker.say("I skipped this song.")
+    speaker.runAndWait()
+def previous():
+    kb = Controller()
+    kb.press(Key.media_previous)
+    sleep(0.1)
+    kb.press(Key.media_previous)
+
+    speaker.say("Now playing previous song.")
+    speaker.runAndWait()
+    
+    
+def translate():
+    global recognizer
+    
+    speaker.say('What would you like to translate?')
+    speaker.runAndWait()
+    
+    done = False
+
+    while not done:
+        try:
+            with speech_recognition.Microphone() as mic:
+                recognizer.adjust_for_ambient_noise(mic, duration=0.2)
+                audio = recognizer.listen(mic)
+                
+                text = recognizer.recognize_google(audio)
+                text = text.lower()
+                
+                translator = Translator()
+
+                translation = translator.translate(text, dest='ru')
+                speaker.say(translation.pronunciation)
+                done = True
+                speaker.runAndWait()
+        except speech_recognition.UnknownValueError:
+            recognizer = speech_recognition.Recognizer()
+            speaker.say("I did not understand.")
+            speaker.runAndWait()
+    
 
 mappings = {
     "greeting": hello,
@@ -155,29 +204,31 @@ mappings = {
     "show_todos": show_todos,
     "exit": quit_now,
     "search": search,
-    "youtube": youtube
+    "youtube": youtube,
+    "next": skip,
+    "previous": previous,
+    "translate": translate
 }
 
 assistant = GenericAssistant('intents.json', intent_methods=mappings)
+
 assistant.train_model()
 
 assistant.save_model()
 
-assistant.load_model()
+assistant.load_model() 
 
 while True:
-    
-    try:       
+    try:
         with speech_recognition.Microphone() as mic:
-            
+
             recognizer.adjust_for_ambient_noise(mic, duration=0.2)
             audio = recognizer.listen(mic)
-            
+
             message = recognizer.recognize_google(audio)
             message = message.lower()
-            
+
         assistant.request(message)
     except speech_recognition.UnknownValueError:
         recognizer = speech_recognition.Recognizer()
-        
-            
+

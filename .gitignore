@@ -2,6 +2,7 @@
 /assistant_model.h5
 /assistant_model_classes.pkl
 /assistant_model_words.pkl
-/best.txt
-/right.txt
-/test-fire.txt
+*.txt
+test.py
+todo.todo
+test1.py
