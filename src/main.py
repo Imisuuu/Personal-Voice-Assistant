@@ -1,3 +1,4 @@
+#region imports
 from neuralintents import GenericAssistant
 import speech_recognition
 import pyttsx3 as tts
@@ -7,19 +8,25 @@ from pynput.keyboard import Key, Controller, Listener, KeyCode
 from pynput import keyboard 
 from time import sleep
 from googletrans import Translator
+import pyperclip
 import subprocess #aby otwierać aplikacje
+import keyboard
+#endregion
 
+#region initialisation
 recognizer = speech_recognition.Recognizer();
 
-speaker = tts.init()
-speaker.setProperty('rate', 150)
+speaker = tts.init() 
+speaker.setProperty('rate', 160)
 voices = speaker.getProperty('voices')
-speaker.setProperty('voice', voices[1].id)
-    
-todo_list = ['Go shopping', 'Clean room']
+speaker.setProperty('voice', voices[1].id) #0 polish, 1 american, 2 spanish, 3 british
 
+todo_list = []
+#endregion
+
+#region functions
 def create_note():
-    global recognizer
+    
     
     speaker.say("What do you want to write onto your note?")
     speaker.runAndWait()
@@ -27,6 +34,7 @@ def create_note():
     done = False
     
     while not done:
+        global recognizer
         try:
             with speech_recognition.Microphone() as mic:
                 recognizer.adjust_for_ambient_noise(mic, duration=0.2)
@@ -54,15 +62,14 @@ def create_note():
             speaker.say("I did not understand you! Please try again!")
             speaker.runAndWait()
 
-def add_todo():
-    global recognizer
-    
+def add_todo(): 
     speaker.say("What to do do you want to add?")
     speaker.runAndWait()
     
     done = False
     
     while not done:
+        global recognizer
         try:
             with speech_recognition.Microphone() as mic:
                 recognizer.adjust_for_ambient_noise(mic, duration=0.2)
@@ -97,14 +104,14 @@ def quit_now():
     exit()
     
 def search():
-    global recognizer
-    
+   
     speaker.say('What are you looking for?')
     speaker.runAndWait()
     
     done = False
     
     while not done:
+        global recognizer
         try:
             with speech_recognition.Microphone() as mic:
                 recognizer.adjust_for_ambient_noise(mic, duration=0.2)
@@ -125,14 +132,13 @@ def search():
             speaker.runAndWait()
 
 def youtube():
-    global recognizer
-    
     speaker.say('What are you looking for?')
     speaker.runAndWait()
     
     done = False
 
     while not done:
+        global recognizer
         try:
             with speech_recognition.Microphone() as mic:
                 recognizer.adjust_for_ambient_noise(mic, duration=0.2)
@@ -158,6 +164,7 @@ def skip():
 
     speaker.say("I skipped this song.")
     speaker.runAndWait()
+    
 def previous():
     kb = Controller()
     kb.press(Key.media_previous)
@@ -167,36 +174,63 @@ def previous():
     speaker.say("Now playing previous song.")
     speaker.runAndWait()
     
+def stop():
+    kb = Controller()
+    kb.press(Key.media_play_pause)
     
-def translate():
-    global recognizer
-    
+    speaker.say("I stopped or resumed this song.")
+    speaker.runAndWait()
+     
+def translate(): 
     speaker.say('What would you like to translate?')
     speaker.runAndWait()
     
     done = False
 
     while not done:
+        global recognizer
         try:
             with speech_recognition.Microphone() as mic:
                 recognizer.adjust_for_ambient_noise(mic, duration=0.2)
                 audio = recognizer.listen(mic)
                 
+                
                 text = recognizer.recognize_google(audio)
                 text = text.lower()
-                
+                    
                 translator = Translator()
-
-                translation = translator.translate(text, dest='ru')
-                speaker.say(translation.pronunciation)
+                
+                
+                translation = translator.translate(text, dest='es')
+                speaker.setProperty('voice', voices[2].id)
+                speaker.setProperty('rate', 130)
+                speaker.say(translation.text)
+                pyperclip.copy(translation.text)
+                
                 done = True
+                speaker.setProperty('voice', voices[1].id)
+                speaker.setProperty('rate', 160)
                 speaker.runAndWait()
         except speech_recognition.UnknownValueError:
             recognizer = speech_recognition.Recognizer()
             speaker.say("I did not understand.")
             speaker.runAndWait()
-    
 
+def you_are_welcome():
+    speaker.say("You're welcome.")
+    speaker.runAndWait()
+
+def open():
+    try:
+        subprocess.call([r"C:\Users\mikol\AppData\Local\Programs\Microsoft VS Code\\Code.exe"])
+        subprocess.call([r"C:\Users\mikol\AppData\Roaming\Spotify\\Spotify.exe"])
+        speaker.runAndWait()
+    except subprocess.UnknownValueError:
+        speaker.runAndWait()
+
+#endregion    
+
+#region intents
 mappings = {
     "greeting": hello,
     "create_note": create_note,
@@ -207,28 +241,37 @@ mappings = {
     "youtube": youtube,
     "next": skip,
     "previous": previous,
-    "translate": translate
+    "translate": translate,
+    "thankyou": you_are_welcome,
+    "stop": stop,
+    "open": open
 }
-
 assistant = GenericAssistant('intents.json', intent_methods=mappings)
+#endregion
 
+#region model
 assistant.train_model()
 
 assistant.save_model()
 
 assistant.load_model() 
+#endregion
 
-while True:
-    try:
-        with speech_recognition.Microphone() as mic:
+#You need to press key every time you use a command!
+#region loop
+while True: 
+    if keyboard.is_pressed('scroll_lock'):
+        try:
+            with speech_recognition.Microphone() as mic:
 
-            recognizer.adjust_for_ambient_noise(mic, duration=0.2)
-            audio = recognizer.listen(mic)
+                recognizer.adjust_for_ambient_noise(mic, duration=0.2)
+                audio = recognizer.listen(mic)
 
-            message = recognizer.recognize_google(audio)
-            message = message.lower()
-
-        assistant.request(message)
-    except speech_recognition.UnknownValueError:
-        recognizer = speech_recognition.Recognizer()
+                message = recognizer.recognize_google(audio)
+                message = message.lower()
+                print(message)
+            assistant.request(message)
+        except speech_recognition.UnknownValueError:
+            recognizer = speech_recognition.Recognizer()
+#endregion
 
