@@ -3,40 +3,75 @@
   {"tag":  "greeting",
   "patterns":  ["Hey", "Hello", "What's up?"],
   "responses":  ["Hello Sir!", "Hello, what can I do for you?"]},
+
   {"tag": "create_note",
   "patterns": ["Please create a new note", "New note", "Create a note", "I want to create a note" ],
   "responses": [""]},
+
   {"tag": "add_todo",
   "patterns":["I want to add a todo", "add a new todo", "add a todo to my list", "new item on my todo list"],
   "responses": [""]},
+
   {"tag": "show_todos",
   "patterns": ["Show my todos", "What are my todos", "What is on my todo list"],
   "responses": [""]},
+
   {"tag": "search",
   "patterns":["search", "search in google", "look for", "find", "Please search", "Please search for", "search for"],
   "responses": [""]},
+
   {"tag": "youtube",
   "patterns":["Search in youtube", "find on youtube", "view video", "find video", "look for video", "watch", "youtube"],
   "responses": [""]},
+
   {"tag": "next",
   "patterns": ["next", "skip"],
-  "responses": [""]
-  },
+  "responses": [""]},
+
   {"tag": "previous",
    "patterns":  ["previous", "last song", "earlier song"],
    "responses":  [""]},
+
   {"tag": "translate",
   "patterns": ["translate", "please translate", "how does it sound in spanish"],
   "responses":[""]},
+
   {"tag":"thankyou",
   "patterns": ["Thank you", "Thanks", "Thank you very much"],
   "responses": [""]},
+
   {"tag":"stop",
   "patterns": ["stop", "resume", "pause", "stop this song", "resume this song", "resume current", "stop current", "pause this song", "pause current"],
   "responses": [""]},
+
   {"tag": "open",
-  "patterns": ["open visual studio", "open vscode", "open default"],
+  "patterns": ["open", "open an app", "open default"],
   "responses": [""]},
+
+  {"tag": "close",
+    "patterns": ["close", "close an app", "close default"],
+    "responses": [""]},
+
+  {"tag": "lyrics",
+  "patterns": ["lyrics", "find lyrics", "what are the lyrics"],
+  "responses": [""]},
+  
+  {"tag": "joke",
+  "patterns": ["tell me a joke", "tell me joke", "make me laugh", "say something funny", "tell me a dad joke"],
+  "responses": [""]},
+
+  {"tag": "weather",
+  "patterns": ["weather", "what is the weather", "what's the temperature", "is cold today"],
+  "responses": [""]},
+  
+  {"tag": "time",
+  "patterns": ["time", "what is the time", "what's the hour", "is it late"],
+  "responses": [""]},
+
+  {"tag": "location",
+  "patterns": ["find location", "where is this place"],
+  "responses": [""]},
+
   {"tag": "exit",
   "patterns": ["Goodbye", "I want to quit", "Let's call it a day"],
   "responses": [""]}
