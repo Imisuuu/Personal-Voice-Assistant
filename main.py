@@ -4,14 +4,13 @@ import speech_recognition
 import pyttsx3 as tts
 import webbrowser as wb
 from pynput.keyboard import Key, Controller
-from pynput import keyboard 
 from time import sleep
 from googletrans import Translator
 import pyperclip
 import subprocess
-import keyboard
+#import keyboard
 from time import sleep
-import random
+#import random
 import requests
 import math
 from datetime import datetime
@@ -255,15 +254,8 @@ def open():
                     speaker.say('I successfully opened rocket league.')
                     done = True
                     speaker.runAndWait()
-                elif "face it" in program or "faceit" in program:
-                    try:
-                        subprocess.Popen([r"C:\Program Files\FACEIT AC\\faceitclient.exe"])
-                        sleep(4)
-                        subprocess.Popen([r"D:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\\csgo.exe"])
-                    except Exception as e:
-                        print(e)
                         
-                    speaker.say('I successfully opened face it.')
+                    speaker.say('I successfully opened faceit.')
                     done = True
                     speaker.runAndWait()
                 else:
@@ -274,7 +266,19 @@ def open():
             recognizer = speech_recognition.Recognizer()
             speaker.say("Please try again.")
             speaker.runAndWait()
-     
+   
+def rocket():
+    subprocess.Popen([r"C:\Program Files\BakkesMod\\BakkesMod.exe"])
+    sleep(0.5)
+    subprocess.Popen([r"D:\Program Files (x86)\Epic Games\Games\Rocket League\rocketleague\Binaries\Win64\\RocketLeague.exe"])
+    speaker.say('I successfully opened rocket league.')
+    speaker.runAndWait()
+    
+def messenger():
+    site = 'https://www.messenger.com/t/2165983176859263/'
+    wb.get().open_new(site)
+    speaker.say('I successfully opened messanger')
+
 def close():
     speaker.say('What program would you like to close?')
     speaker.runAndWait()
@@ -421,13 +425,14 @@ mappings = {
     "translate": translate,
     "thankyou": you_are_welcome,
     "stop": stop,
-    "open": open,
     "close": close,
     "lyrics": lyrics,
     "joke": joke,  
     "weather": weather,
     "time": time,
-    "location": location
+    "location": location,
+    "rocket": rocket,
+    "messenger": messenger
 }
 assistant = GenericAssistant('intents.json', intent_methods=mappings)
 #endregion
@@ -438,12 +443,32 @@ assistant.train_model()
 assistant.save_model()
 
 assistant.load_model() 
+
+hour = int(datetime.now().hour)
+if hour>=0 and hour<=12:
+    speaker.say("Good Morning")
+elif hour>12 and hour<18:
+    speaker.say("Good afternoon")
+else:
+    speaker.say("Good evening")
+speaker.runAndWait()
 #endregion
 
 # You need to press key every time you use a command!
 #region loop
-while True: 
-    if keyboard.is_pressed('scroll_lock'):
+        
+while True:
+    try:
+        with speech_recognition.Microphone() as mic1:
+            recognizer.adjust_for_ambient_noise(mic1, duration=0.2)
+            ad = recognizer.listen(mic1)
+            
+            msg = recognizer.recognize_google(ad, language="en-US")
+            msg = msg.lower()
+    except speech_recognition.UnknownValueError:
+        recognizer = speech_recognition.Recognizer()
+       
+    if msg == 'hey jarvis' or 'hey jarvis' in msg:    #or keyboard.is_pressed('scroll_lock')
         print('Listening...')
         winsound.PlaySound("beep", winsound.SND_FILENAME)
         try:
@@ -458,5 +483,7 @@ while True:
             assistant.request(message)
         except speech_recognition.UnknownValueError:
             recognizer = speech_recognition.Recognizer()
+            
+
 #endregion
 

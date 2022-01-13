@@ -44,13 +44,17 @@
   "patterns": ["stop", "resume", "pause", "stop this song", "resume this song", "resume current", "stop current", "pause this song", "pause current"],
   "responses": [""]},
 
-  {"tag": "open",
-  "patterns": ["open", "open an app", "open default"],
+  {"tag": "messenger",
+  "patterns": ["open messenger", "did I get any new messages", "did I get any new notifications", "did someone write to me"],
   "responses": [""]},
 
+  {"tag": "rocket",
+  "patterns": ["open rocket league", "open football", "open auto football"],
+  "responses": [""]},
+  
   {"tag": "close",
-    "patterns": ["close", "close an app", "close default"],
-    "responses": [""]},
+  "patterns": ["close", "close an app", "close default"],
+  "responses": [""]},
 
   {"tag": "lyrics",
   "patterns": ["lyrics", "find lyrics", "what are the lyrics"],
@@ -61,7 +65,7 @@
   "responses": [""]},
 
   {"tag": "weather",
-  "patterns": ["weather", "what is the weather", "what's the temperature", "is cold today"],
+  "patterns": ["weather", "what is the weather", "what's the temperature", "is it cold today"],
   "responses": [""]},
   
   {"tag": "time",
