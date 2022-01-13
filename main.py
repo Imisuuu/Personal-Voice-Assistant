@@ -355,8 +355,8 @@ def joke():
 
 def weather():
     try:
-        city='Łódź'
-        api_key='f4f823a3654c3f4cfc09b7987b49f248'
+        city='XXX'
+        api_key='XXX'
         
         url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}'
         response = requests.get(url).json()
