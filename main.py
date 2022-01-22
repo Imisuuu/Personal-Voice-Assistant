@@ -29,7 +29,7 @@ todo_list = []
 #endregion
 
 #region functions
-def create_note(): #zepsute nadal
+def create_note(): 
     speaker.say("What do you want to write onto your note?")
     speaker.runAndWait()
     
@@ -267,15 +267,9 @@ def open():
             speaker.say("Please try again.")
             speaker.runAndWait()
    
-def rocket():
-    subprocess.Popen([r"C:\Program Files\BakkesMod\\BakkesMod.exe"])
-    sleep(0.5)
-    subprocess.Popen([r"D:\Program Files (x86)\Epic Games\Games\Rocket League\rocketleague\Binaries\Win64\\RocketLeague.exe"])
-    speaker.say('I successfully opened rocket league.')
-    speaker.runAndWait()
     
 def messenger():
-    site = 'https://www.messenger.com/t/2165983176859263/'
+    site = 'https://www.messenger.com/'
     wb.get().open_new(site)
     speaker.say('I successfully opened messanger')
 

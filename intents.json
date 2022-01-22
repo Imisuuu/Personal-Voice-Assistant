@@ -47,10 +47,6 @@
   {"tag": "messenger",
   "patterns": ["open messenger", "did I get any new messages", "did I get any new notifications", "did someone write to me"],
   "responses": [""]},
-
-  {"tag": "rocket",
-  "patterns": ["open rocket league", "open football", "open auto football"],
-  "responses": [""]},
   
   {"tag": "close",
   "patterns": ["close", "close an app", "close default"],
